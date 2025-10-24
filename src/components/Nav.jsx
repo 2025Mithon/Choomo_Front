@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import IconItem from './IconItem';
 import LogoImg from '../assets/logo.png';
+import { Link } from 'react-router-dom';
 
 const NavBox = styled.nav`
     width: 96px;
@@ -41,34 +42,34 @@ export default function Nav(props) {
     return (
         <NavBox>
             <Logo>
-                <a href="/">
+                <Link to="/">
                     <img src={LogoImg} alt="" />
-                </a>
+                </Link>
             </Logo>
-            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <MenuBtn selected={props.index === '1'}>
                     <IconItem iconName="icon1" selected={props.index === '1'} />
                     <MenuText>추억찾기</MenuText>
                 </MenuBtn>
-            </a>
-            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            </Link>
+            <Link to="/chat" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <MenuBtn selected={props.index === '2'}>
                     <IconItem iconName="icon2" selected={props.index === '2'} />
                     <MenuText>채팅목록</MenuText>
                 </MenuBtn>
-            </a>
-            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            </Link>
+            <Link to="/board" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <MenuBtn selected={props.index === '3'}>
                     <IconItem iconName="icon3" selected={props.index === '3'} />
                     <MenuText>게시판</MenuText>
                 </MenuBtn>
-            </a>
-            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            </Link>
+            <Link to="/mypage" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <MenuBtn selected={props.index === '4'}>
                     <IconItem iconName="icon4" selected={props.index === '4'} />
                     <MenuText>마이페이지</MenuText>
                 </MenuBtn>
-            </a>
+            </Link>
 
         </NavBox>
     );

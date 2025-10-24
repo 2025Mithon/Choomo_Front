@@ -1,7 +1,7 @@
 import Background from "../components/Background";
 import styled from "@emotion/styled";
-import { Link } from 'react-router-dom';
-import SignUP from "./SignUP";
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
 const LC = styled.div`
   display: flex;
@@ -58,17 +58,17 @@ const LoginFormButton = styled.button`
   margin-top: 50px;
   width: 448px;
   height: 64px;
-  border: none;              /* ✅ 기본 테두리 제거 */
+  border: none;              
   border-radius: 1000px;
   background: #783A1E;
   color: #FFF;
   font-weight: 500;
-  font-size: 18px;           /* ✅ 글자 크기 추가 */
-  display: flex;             /* ✅ 가운데 정렬용 */
-  justify-content: center;   /* ✅ 수평 중앙 정렬 */
-  align-items: center;       /* ✅ 수직 중앙 정렬 */
-  cursor: pointer;           /* ✅ 클릭 가능한 모양 */
-  outline: none;             /* ✅ 클릭 시 파란 테두리 제거 (필요 시) */
+  font-size: 18px;           
+  display: flex;             
+  justify-content: center;   
+  align-items: center;       
+  cursor: pointer;           
+  outline: none;             
 `;
 
 const SignUPMsg = styled.p`
@@ -83,6 +83,37 @@ const Link2 = styled(Link)`
 
 
 export default function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://172.20.10.3:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ "email" : email, "passwd" : password }),
+            });
+            
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('jwt_token', data.token);
+                navigate('/'); // Redirect to Kakaomap page
+            } else {
+                const errorData = await response.json();
+                console.error('Login failed:', errorData);
+                alert(`로그인 실패: ${errorData.message || response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Network error or unexpected issue:', error);
+            alert('네트워크 오류 또는 예상치 못한 문제가 발생했습니다.');
+        }
+    };
+
     return (
         <>
           <Background />
@@ -90,11 +121,21 @@ export default function Login() {
             <LoginContainer>
             <LoginMessage1>로그인 하기</LoginMessage1>
             <LoginMessage2>이메일로 로그인 하세요.</LoginMessage2>
-            <LoginForm>
-                <LoginFormInput type="email" placeholder="이메일 주소" />
-                <LoginFormInput type="password" placeholder="비밀번호" />
+            <LoginForm onSubmit={handleSubmit}>
+                <LoginFormInput 
+                    type="email" 
+                    placeholder="이메일 주소" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <LoginFormInput 
+                    type="password" 
+                    placeholder="비밀번호" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
                 <LoginFormButton type="submit">로그인하기</LoginFormButton>
-                <SignUPMsg><Link2 to="/SignUP">회원가입하기</Link2></SignUPMsg>
+                <SignUPMsg><Link to="/SignUP">회원가입하기</Link></SignUPMsg>
             </LoginForm>
           </LoginContainer>
 
