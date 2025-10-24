@@ -29,20 +29,21 @@ const iconImageMap = {
 
 const StyledImage = styled.img`
     width: 32px;
-    height: 32px;
     cursor: pointer;
     position: relative;
 `;
 
-export default function IconItem({ iconName, color = 'black' }) { // Default to black if color is not provided
-    const imageSrc = iconImageMap[iconName]?.[color];
+export default function IconItem({ iconName, selected }) { // Removed default color prop
+    const effectiveColor = selected ? 'white' : 'black'; // Use black if selected, white otherwise
+
+    const imageSrc = iconImageMap[iconName]?.[effectiveColor];
 
     if (!imageSrc) {
-        console.warn(`Icon not found for name: ${iconName}, color: ${color}`);
+        console.warn(`Icon not found for name: ${iconName}, color: ${effectiveColor}`);
         return null;
     }
 
     return (
-        <StyledImage src={imageSrc} alt={`${iconName} ${color}`} />
+        <StyledImage src={imageSrc} alt={`${iconName} ${effectiveColor}`} />
     );
 }
